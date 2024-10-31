@@ -50,7 +50,7 @@ plot(rainfall_data) # <1>
 
 ### Discussion
 
-*After data cleaning, text 50--also known as Granja Station--has left data from year 1973 to present time. There is over 50 years of water collection data which is a sufficient amount of data in order to make a meaningful risk assessment. 2011 is the only year with a drought and this *
+*After data cleaning, text 50--also known as Granja Station--has left data from year 1973 to present time. There is over 50 years of water collection data which is a sufficient amount of data in order to make a meaningful risk assessment. 2011 is the only year without any data. But, based on Science Direct, 2011 was a year that Ceara, Brazil did have a drought. This concludes that the missing data from 2011 is from a drought.*
 
 ## Understanding the Theoretical Model
 
