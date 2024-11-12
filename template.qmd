@@ -54,6 +54,8 @@ plot(rainfall_data) # <1>
 
 ## Understanding the Theoretical Model
 
+Some assumptions we are making with these theoreticalmdodels are the mass balance equation and consumption rate/time. The mass balance equation is an idealized version of the volume. This equation does not account for evaporation. In addition, consumption is assuming that the rainy season will on last for the first 150 days of the year while in reality the rainy season can last shorter or longer than this time. In addition, the average consumption of a household will vary throughout regions. To recieve a more precise average, it is ideal to get a consensus. Changing C_t to an equation instead of number will help make the mass aalance equation more precise.
+
 Let's explore the model that simulates the rainwater harvesting system.
 
 ### Mass Balance Equation
@@ -110,11 +112,13 @@ You will have the opportunity to change these values later.
 #| output: false
 param = ModelParameters(          # <1>
     runoff_coefficient=0.85,      # <2>
-    roof_area_m2=45.0,            # <3>
-    first_flush_mm=2.0,           # <4>
+    roof_area_m2=50.0,            # <3>
+    first_flush_mm=1.5,           # <4>
     tank_capacity_L=16000.0       # <5>
 )
 ```
+
+I changed the roof area and the first flush parameters. Increasing the roof area will increase the inflow to the water tank. The roof area is directly proportional to the inflow in the water tank. In addition decreasing the amount of water we first flush out will allow the user to use more water in their tank. The first flush is indirectly proportional to the inflow of the tank.
 
 1. This creates a `ModelParameters` object with the specified parameters.
 2. The runoff coefficient ($\eta$) is a measure of how much of the rain that falls on the roof ends up in the tank.
@@ -157,6 +161,8 @@ all_results = [run_timesteps(rainfall_data.annual_data[year], param) for year in
 any_failures = [!isempty(result.failure_dates) for result in all_results]  # <3>
 println("Number of years with failures: ", sum(any_failures), " out of ", length(all_years))  # <4>
 ```
+
+There is a 2% chance of failure in the tank inflow. The 2% failure comes from the 1 year of failure compared to the other 48 years of success. 
 
 1. We get all the years in order.
 2. We run the simulation for each year.
