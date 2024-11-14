@@ -54,39 +54,39 @@ plot(rainfall_data) # <1>
 
 ## Understanding the Theoretical Model
 
-Some assumptions we are making with these theoreticalmdodels are the mass balance equation and consumption rate/time. The mass balance equation is an idealized version of the volume. This equation does not account for evaporation. In addition, consumption is assuming that the rainy season will on last for the first 150 days of the year while in reality the rainy season can last shorter or longer than this time. In addition, the average consumption of a household will vary throughout regions. To recieve a more precise average, it is ideal to get a consensus. Changing C_t to an equation instead of number will help make the mass aalance equation more precise.
+*Some assumptions we are making with these theoretical mdodels are the mass balance equation and consumption rate/time. The mass balance equation is an idealized version of the volume. This equation does not account for evaporation. In addition, consumption is assuming that the rainy season will on last for the first 150 days of the year while in reality the rainy season can last shorter or longer than this time. In addition, the average consumption of a household will vary throughout regions. To recieve a more precise average, it is ideal to get a consensus. Changing C_t to an equation instead of number will help make the mass balance equation more precise.*
 
-Let's explore the model that simulates the rainwater harvesting system.
+$$
+E_t = k \times A \times (P_s(T)- P_v)/(R \times T)
+$$
+
+- $E_t$: rate of evaporation
+- $k$: empirical constant
+- $A$: surface area of the water
+- $P_s(T)$: saturation vapor pressure at temperature T
+- $P_v$: partial pressure of vapor already present in the container
+- $R$: gas constant (8.314 J/(mol·K))
+- $T$: absolute temperature (K)
 
 ### Mass Balance Equation
 
-The mass balance model for the rainwater tank is given by:
-
 $$
-V_{t+1} = V_t + Q_t - C_t | 0 \leq V_t \leq V_\text{max}
+V_{t+1} = V_t + Q_t - C_t - E_t| 0 \leq V_t \leq V_\text{max}
 $$
 
 - $V_t$: the volume of water in the tank at time $t$
 - $Q_t$ is the volume of water added to the tank at time $t$
 - $C_t$ is the volume of water consumed at time $t$
 - $V_\text{max}$: the maximum volume of the tank
+- $E_t$: new evaporation formula, look above
 
 ### Inflow ($Q_t$)
-
-Inflow is calculated as
 
 $$
 Q_t = \eta \times A \times \max(P_t - F, 0).
 $$
 
-- $\eta$: the runoff coefficient, which accounts for losses due to evaporation, spilling, etc.
-- $A$: the area of the roof (we will use square meters)
-- $P_t$: the precipitation at time $t$ (we will use millimeters per day)
-- $F$: the first flush volume (we will use millimeters). The first flush volume is often discarded, so that each time it rains the first bit of water (which is usually dirty) is not used (see [here](https://rainwaterharvesting.tamu.edu/pre-storage-treatment/) for more details).
-
 ### Consumption
-
-Consumption is modeled as:
 
 $$
 C_t = \begin{cases}
@@ -95,18 +95,9 @@ C_t = \begin{cases}
 \end{cases}
 $$
 
-This makes two major assumptiuons.
-First, the household begins using water from the tank after the 150th day of the year.
-This is based on the idea that the rainy season lasts for about the first 150 days of the year, and so they may have other sources of water before then.
-The second assumption is that each household consumes 74.1 liters per day during the dry season.
-How does this compare to your household's water usage?
-
 ## Model Implementation and Testing
 
 ### Defining the Model Parameters
-
-We can define the model parameters with sensible default values.
-You will have the opportunity to change these values later.
 
 ```{julia}
 #| output: false
@@ -118,7 +109,7 @@ param = ModelParameters(          # <1>
 )
 ```
 
-I changed the roof area and the first flush parameters. Increasing the roof area will increase the inflow to the water tank. The roof area is directly proportional to the inflow in the water tank. In addition decreasing the amount of water we first flush out will allow the user to use more water in their tank. The first flush is indirectly proportional to the inflow of the tank.
+*I changed the roof area and the first flush parameters. Increasing the roof area will increase the inflow to the water tank. The roof area is directly proportional to the inflow in the water tank. In addition decreasing the amount of water we first flush out will allow the user to use more water in their tank. The first flush is indirectly proportional to the inflow of the tank.*
 
 1. This creates a `ModelParameters` object with the specified parameters.
 2. The runoff coefficient ($\eta$) is a measure of how much of the rain that falls on the roof ends up in the tank.
@@ -162,9 +153,9 @@ any_failures = [!isempty(result.failure_dates) for result in all_results]  # <3>
 println("Number of years with failures: ", sum(any_failures), " out of ", length(all_years))  # <4>
 ```
 
-There is a 2% chance of failure in the tank inflow. The 2% failure comes from the 1 year of failure compared to the other 48 years of success. 
-
 1. We get all the years in order.
 2. We run the simulation for each year.
 3. We check if any failures occurred.
 4. We print the number of years with failures and the total number of years.
+
+*There is a 2% chance of failure in the tank inflow. The 2% failure comes from the 1 year of failure compared to the other 48 years of success.*
