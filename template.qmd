@@ -52,9 +52,11 @@ plot(rainfall_data) # <1>
 
 *After data cleaning, text 50--also known as Granja Station--has left data from year 1973 to present time. There is over 50 years of water collection data which is a sufficient amount of data in order to make a meaningful risk assessment. 2011 is the only year without any data. But, based on Science Direct, 2011 was a year that Ceara, Brazil did have a drought. This concludes that the missing data from 2011 is from a drought.*
 
+*Citation* Seigerman, Cydney. "At the extremes: Assessing interrelations among the impacts of and responses to extreme hydroclimatic events in Ceará, Northeast Brazil." Science Direct, 2024.
+
 ## Understanding the Theoretical Model
 
-*Some assumptions we are making with these theoretical mdodels are the mass balance equation and consumption rate/time. The mass balance equation is an idealized version of the volume. This equation does not account for evaporation. In addition, consumption is assuming that the rainy season will on last for the first 150 days of the year while in reality the rainy season can last shorter or longer than this time. In addition, the average consumption of a household will vary throughout regions. To recieve a more precise average, it is ideal to get a consensus. Changing C_t to an equation instead of number will help make the mass balance equation more precise.*
+*Some assumptions we are making with these theoretical models are the mass balance equation and consumption rate/time. The mass balance equation is an idealized version of the volume. This equation does not account for evaporation. In addition, consumption is assuming that the rainy season will on last for the first 150 days of the year while in reality the rainy season can last shorter or longer than this time. In addition, the average consumption of a household will vary throughout regions. To recieve a more precise average, it is ideal to get a consensus. Changing C_t to an equation instead of number will help make the mass balance equation more precise.*
 
 $$
 E_t = k \times A \times (P_s(T)- P_v)/(R \times T)
@@ -111,12 +113,6 @@ param = ModelParameters(          # <1>
 
 *I changed the roof area and the first flush parameters. Increasing the roof area will increase the inflow to the water tank. The roof area is directly proportional to the inflow in the water tank. In addition decreasing the amount of water we first flush out will allow the user to use more water in their tank. The first flush is indirectly proportional to the inflow of the tank.*
 
-1. This creates a `ModelParameters` object with the specified parameters.
-2. The runoff coefficient ($\eta$) is a measure of how much of the rain that falls on the roof ends up in the tank.
-3. The roof area ($A$) is the area of the roof that the rain falls on.
-4. The first flush volume ($V_f$) is the volume of rain that is discarded because it is dirty.
-5. The tank capacity ($V_\text{max}$) is the maximum volume of the tank.
-
 ### Running the Simulation for One Year
 
 Let's run the model for the year 1981.
@@ -138,13 +134,7 @@ p2 = plot(rainfall_1981)
 plot(p2, p1, layout=(2, 1), size=(1000, 700), link=:x)
 ```
 
-Observe how the tank's water level responds to rainfall events.
-Note any periods when the tank runs dry or overflows.
-
 ### Reliability Analysis
-
-We can run simulations for all years, one at a time, and then check how many times the tank runs dry.
-You can run simulations for all years at once with the following code:
 
 ```{julia}
 all_years = sort(collect(keys(rainfall_data.annual_data)))          # <1>
@@ -158,4 +148,6 @@ println("Number of years with failures: ", sum(any_failures), " out of ", length
 3. We check if any failures occurred.
 4. We print the number of years with failures and the total number of years.
 
-*There is a 2% chance of failure in the tank inflow. The 2% failure comes from the 1 year of failure compared to the other 48 years of success.*
+*There is a 2% chance of failure in the tank inflow. The 2% failure comes from the 1 year of failure compared to the other 48 years of success. *
+
+*In addition, the models are confusing to read. There are vertical lines in graph which means that there was an increase in water with no time change. Indicting that is this actually a slightly diagonal line will help readers understand the graph better. *
